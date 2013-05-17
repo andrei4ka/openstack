@@ -4,6 +4,7 @@
 
 function update_config()
 {
+	cp /etc/ntp.conf /etc/ntp.conf.openstackback
 	echo -e "restrict $CTRL_RANGE mask $CTRL_MASK\nbroadcast $CTRL_BROADCAST\ndisable auth\nbroadcastclient" >> /etc/ntp.conf
 }
 

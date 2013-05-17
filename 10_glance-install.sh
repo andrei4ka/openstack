@@ -4,11 +4,8 @@
 
 function configure_glance()
 {
-	echo "[filter:authtoken]" >> /etc/glance/glance-api-paste.ini
 	echo "service_host = $KEYSTONE_HOST" >> /etc/glance/glance-api-paste.ini
 	echo "service_port = 5000" >> /etc/glance/glance-api-paste.ini
-	echo "paste.filter_factory = keystoneclient.middleware.auth_token:filter_factory" >> /etc/glance/glance-api-paste.ini
-	echo "delay_auth_decision = true" >> /etc/glance/glance-api-paste.ini
 	echo "auth_host = $KEYSTONE_HOST" >> /etc/glance/glance-api-paste.ini
 	echo "auth_port = 35357" >> /etc/glance/glance-api-paste.ini
 	echo "auth_protocol = http" >> /etc/glance/glance-api-paste.ini
@@ -16,21 +13,20 @@ function configure_glance()
 	echo "admin_tenant_name = $SERVICE_TENANT_NAME" >> /etc/glance/glance-api-paste.ini
 	echo "admin_user = glance" >> /etc/glance/glance-api-paste.ini
 	echo "admin_password = $GLANCE_USER_PASSWORD" >> /etc/glance/glance-api-paste.ini
-	
+
 	sed -i 's/#flavor=/flavor = keystone/g' /etc/glance/glance-api.conf
-	
-	echo "[filter:authtoken]" >> /etc/glance/glance-registry-paste.ini
-        echo "paste.filter_factory = keystoneclient.middleware.auth_token:filter_factory" >> /etc/glance/glance-registry-paste.ini
+	sed -i "s%sql_connection = sqlite:////var/lib/glance/glance.sqlite%sql_connection = mysql://glance:$GLANCE_DB_PASSWORD@$MYSQL_HOST/glance%g" /etc/glance/glance-api.conf
+
 	echo "service_host = $KEYSTONE_HOST" >> /etc/glance/glance-registry-paste.ini
-        echo "service_port = 5000" >> /etc/glance/glance-registry-paste.ini
-        echo "auth_host = $KEYSTONE_HOST" >> /etc/glance/glance-registry-paste.ini
-        echo "auth_port = 35357" >> /etc/glance/glance-registry-paste.ini
-        echo "auth_protocol = http" >> /etc/glance/glance-registry-paste.ini
-        echo "auth_uri = http://$KEYSTONE_HOST:5000/" >> /etc/glance/glance-registry-paste.ini
-        echo "admin_tenant_name = $SERVICE_TENANT_NAME" >> /etc/glance/glance-registry-paste.ini
-        echo "admin_user = glance" >> /etc/glance/glance-registry-paste.ini
-        echo "admin_password = $GLANCE_USER_PASSWORD" >> /etc/glance/glance-registry-paste.ini
-	
+	echo "service_port = 5000" >> /etc/glance/glance-registry-paste.ini
+	echo "auth_host = $KEYSTONE_HOST" >> /etc/glance/glance-registry-paste.ini
+	echo "auth_port = 35357" >> /etc/glance/glance-registry-paste.ini
+	echo "auth_protocol = http" >> /etc/glance/glance-registry-paste.ini
+	echo "auth_uri = http://$KEYSTONE_HOST:5000/" >> /etc/glance/glance-registry-paste.ini
+	echo "admin_tenant_name = $SERVICE_TENANT_NAME" >> /etc/glance/glance-registry-paste.ini
+	echo "admin_user = glance" >> /etc/glance/glance-registry-paste.ini
+	echo "admin_password = $GLANCE_USER_PASSWORD" >> /etc/glance/glance-registry-paste.ini
+
 	sed -i "s%sql_connection = sqlite:////var/lib/glance/glance.sqlite%sql_connection = mysql://glance:$GLANCE_DB_PASSWORD@$MYSQL_HOST/glance%g" /etc/glance/glance-registry.conf
 	sed -i 's/#flavor=/flavor = keystone/g' /etc/glance/glance-registry.conf
 	

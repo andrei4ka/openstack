@@ -25,11 +25,11 @@ function restart_nova ()
 	for svc in nova-api nova-cert nova-consoleauth nova-scheduler; do service $svc restart; done
 }
 
-run_command "Installing Nova API" apt-get install -y nova-api nova-cert nova-consoleauth nova-scheduler nova-network nova-novncproxy nova-doc nova-conductor nova-compute-kvm
-run_command "Stop network service" service nova-network stop
-service nova-network stop > /dev/null
-run_command "Create Database" create_database
-run_command "Database Sync" nova-manage db sync
+#run_command "Installing Nova API" apt-get install -y nova-api nova-cert nova-consoleauth nova-scheduler nova-network nova-novncproxy nova-doc nova-conductor nova-compute-kvm
+#run_command "Stop network service" service nova-network stop
+#service nova-network stop > /dev/null
+#run_command "Create Database" create_database
+#run_command "Database Sync" nova-manage db sync
 run_command "Initial network data" nova-manage network create private --fixed_range_v4=$FIXED_IP_RANGE --num_networks=1 --bridge_interface=$DATA_IFACE_NAME --vlan=$FIRST_VLAN_ID --network_size=$NETWORK_SIZE
 run_command "Initial network data" nova-manage floating create --ip_range=$FLOATING_IP_RANGE --interface=$PUB_IFACE_NAME
 run_command "Configure Nova API" configure_nova_api

@@ -34,7 +34,7 @@ function configure_quantum ()
 	sed -i "s/^\[DATABASE]/#[DATABASE]/g" /etc/quantum/plugins/linuxbridge/linuxbridge_conf.ini
 	sed -i "s/reconnect_interval = 2/#reconnect_interval = 2/g" /etc/quantum/plugins/linuxbridge/linuxbridge_conf.ini
 
-	echo "QUANTUM_PLUGIN_CONFIG = /etc/quantum/plugins/linuxbridge/linuxbridge_conf.ini" >  /etc/default/quantum-server
+	echo "QUANTUM_PLUGIN_CONFIG=\"/etc/quantum/plugins/linuxbridge/linuxbridge_conf.ini\"" >  /etc/default/quantum-server
 
 	echo "[DATABASE]" >> /etc/quantum/plugins/linuxbridge/linuxbridge_conf.ini
 	echo "reconnect_interval = 2" >> /etc/quantum/plugins/linuxbridge/linuxbridge_conf.ini
@@ -54,6 +54,8 @@ function configure_quantum ()
 	sed -i "s/admin_user =/admin_user = quantum/g" /etc/quantum/quantum.conf
 	sed -i "s/%SERVICE_USER%/$SERVICE_USER/g" /etc/quantum/quantum.conf
 	sed -i "s/%SERVICE_PASSWORD%/$SERVICE_PASSWORD/g" /etc/quantum/quantum.conf
+	sed -i "s/core_plugin = quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPluginV2/#core_plugin = quantum.plugins.openvswitch.ovs_quantum_plugin.OVSQuantumPluginV2/g" /etc/quantum/quantum.conf
+
 	#Edit the /etc/quantum/dhcp_agent.ini:
 	sed -i "s/#interface_driver = quantum.agent.linux.interface.BridgeInterfaceDriver/interface_driver = quantum.agent.linux.interface.BridgeInterfaceDriver/g" /etc/quantum/dhcp_agent.ini
 	#Update /etc/quantum/metadata_agent.ini:
@@ -76,7 +78,7 @@ function restart_quantum_services ()
 	service dnsmasq restart
 }
 
-#run_command "Installing Quantum and other components" apt-get install -y quantum-server quantum-plugin-linuxbridge quantum-plugin-linuxbridge-agent dnsmasq quantum-dhcp-agent quantum-l3-agent
+run_command "Installing Quantum and other components" apt-get install -y quantum-server quantum-plugin-linuxbridge quantum-plugin-linuxbridge-agent dnsmasq quantum-dhcp-agent quantum-l3-agent
 run_command "Creating Database" create_database
-#run_command "Configure Quantum" configure_quantum
+run_command "Configure Quantum" configure_quantum
 run_command "Restart all Quantum services" restart_quantum_services

@@ -4,7 +4,8 @@
 
 function configure_nova ()
 {
-	echo "[DEFAULT]" >> /etc/nova/nova.conf
+	cp /etc/nova/nova.conf /etc/nova/nova.conf.openstackbackup
+	echo "[DEFAULT]" > /etc/nova/nova.conf
 	echo "logdir=/var/log/nova" >> /etc/nova/nova.conf
 	echo "state_path=/var/lib/nova" >> /etc/nova/nova.conf
 	echo "lock_path=/run/lock/nova" >> /etc/nova/nova.conf

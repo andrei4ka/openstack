@@ -35,8 +35,8 @@ function configure_nova ()
 
 }
 
-#run_command "Installing Cinder" apt-get install -y cinder-api cinder-scheduler cinder-volume iscsitarget open-iscsi iscsitarget-dkms
-#run_command "Configure Cinder" configure_nova
+run_command "Installing Cinder" apt-get install -y cinder-api cinder-scheduler cinder-volume iscsitarget open-iscsi iscsitarget-dkms
+run_command "Configure Cinder" configure_nova
 run_command "Creating Cinder" create_cinderdb
 run_command "Database Sync" cinder-manage db sync
 run_command "Restart Cinder volume" service cinder-volume restart
