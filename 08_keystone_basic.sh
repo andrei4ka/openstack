@@ -2,7 +2,7 @@
 
 . $(dirname $(readlink -f $0))/00-lib.sh
 
-export SERVICE_TOKEN=$(grep '^admin_token' /etc/keystone/keystone.conf | awk '/ = / {print $3}')
+export SERVICE_TOKEN=$ADMIN_TOKEN
 export SERVICE_ENDPOINT=http://$KEYSTONE_HOST:35357/v2.0
 
 
