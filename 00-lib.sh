@@ -23,4 +23,9 @@ function run_command()
         STDOUT=$($* 2>&1) && (echo "DONE") || (echo "ERROR"; echo $STDOUT; kill -9 $$)
 }
 
+get_id () {
+    echo `$@ | awk '/ id / { print $4 }'`
+}
+
+
 read_config
